@@ -173,6 +173,12 @@ struct VulkanTexture : public HwTexture, VulkanResource {
 
     bool isTransientAttachment() const {
         VulkanTextureState const* state = getSharedState();
+        if(state->mIsTransientAttachment)
+        {
+            VkDeviceSize size = 0xFFFFFFFF;
+            bluevk::vkGetDeviceMemoryCommitment(state->mDevice, state->mTextureImageMemory, &size);
+            FVK_LOGE << "vkGetDeviceMemoryCommitment=" << size << utils::io::endl;
+        }
         return state->mIsTransientAttachment;
     }
 
